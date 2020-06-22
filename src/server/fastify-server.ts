@@ -2,7 +2,7 @@ import fastify from 'fastify';
 import { FastifyInstance } from 'fastify';
 
 import { Server } from './server.interface';
-import { DataProvider } from './data-provider.interface';
+import { DataProvider } from '../data-provider';
 
 export class FastifyServer implements Server {
   #app: FastifyInstance;
@@ -11,10 +11,12 @@ export class FastifyServer implements Server {
   constructor(dataProvider: DataProvider) {
     this.#app = fastify();
     this.#app.use((_, res) => {
-      res.setHeader('Content-Type', 'application/octet-stream');
+      const response = dataProvider.getData();
+
+      res.setHeader('Content-Type', response.contentType);
       res.setHeader('X-Powered-By', 'fastify');
       res.writeHead(200);
-      res.end(dataProvider.getData());
+      res.end(response.data);
       this.#requests++;
     });
   }

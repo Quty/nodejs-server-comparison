@@ -1,28 +1,23 @@
 import { Http2Server as NodeHttp2Server, createServer } from 'http2';
 
 import { Server } from './server.interface';
-import { DataProvider } from './data-provider.interface';
+import { DataProvider } from '../data-provider';
 
 export class Http2Server implements Server {
   #server: NodeHttp2Server;
   #requests: number = 0;
 
   constructor(dataProvider: DataProvider) {
-    // this.#server = createServer((_, res) => {
-    //   res.setHeader('X-Powered-By', 'node-http-2');
-    //   res.setHeader('Content-Type', 'application/octet-stream');
-    //   res.writeHead(200);
-    //   res.end(dataProvider.getData());
-    //   this.#requests++;
-    // });
     this.#server = createServer();
     this.#server.on('stream', (stream) => {
+      const response = dataProvider.getData();
+
       stream.respond({
         ':status': 200,
         'X-Powered-By': 'node-http-2',
-        'Content-Type': 'application/octet-stream',
+        'Content-Type': response.contentType,
       });
-      stream.end(dataProvider.getData());
+      stream.end(response.data);
       this.#requests++;
     });
   }

@@ -1,8 +1,8 @@
-import { ResponseDataProvider } from './response-data-provider';
+import { RandomBytesProvider } from './data-provider/random-bytes-provider';
 import { Server, HttpServer, ExpressServer, FastifyServer } from './server';
 import { PORT, SERVER } from './config';
 
-const dataProvider = new ResponseDataProvider({ dataLength: 1024 });
+const dataProvider = new RandomBytesProvider({ dataLength: 1024 });
 
 let server: Server;
 

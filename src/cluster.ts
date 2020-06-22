@@ -1,6 +1,6 @@
 import * as cluster from 'cluster';
 
-import { ResponseDataProvider } from './response-data-provider';
+import { RandomBytesProvider } from './data-provider/random-bytes-provider';
 import { Server, HttpServer, ExpressServer, FastifyServer } from './server';
 import { PORT, SERVER, WORKERS_COUNT } from './config';
 
@@ -25,7 +25,7 @@ if (cluster.isMaster) {
     workers.push(cluster.fork());
   }
 } else {
-  const dataProvider = new ResponseDataProvider({ dataLength: 1024 });
+  const dataProvider = new RandomBytesProvider({ dataLength: 1024 });
 
   let server: Server;
 
