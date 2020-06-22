@@ -1,11 +1,8 @@
 import * as cluster from 'cluster';
-import * as os from 'os';
 
 import { ResponseDataProvider } from './response-data-provider';
 import { Server, HttpServer, ExpressServer, FastifyServer } from './server';
-import { PORT, SERVER } from './config';
-
-const CPUS_COUNT = os.cpus().length;
+import { PORT, SERVER, WORKERS_COUNT } from './config';
 
 if (cluster.isMaster) {
   const workers: cluster.Worker[] = [];
@@ -24,7 +21,7 @@ if (cluster.isMaster) {
     console.log('Master finished his work');
   });
 
-  for (let i = 0; i < CPUS_COUNT; i++) {
+  for (let i = 0; i < WORKERS_COUNT; i++) {
     workers.push(cluster.fork());
   }
 } else {
