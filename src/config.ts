@@ -5,6 +5,7 @@ function getServer() {
     case 'node-http':
     case 'express':
     case 'fastify':
+    case 'koa':
       return process.env.SERVER;
     default:
       return 'node-http';

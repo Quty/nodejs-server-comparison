@@ -1,22 +1,11 @@
 import { RandomBytesProvider } from './data-provider/random-bytes-provider';
-import { Server, HttpServer, ExpressServer, FastifyServer } from './server';
+import { ServerFactory } from './server-factory';
 import { PORT, SERVER } from './config';
 
 const dataProvider = new RandomBytesProvider({ dataLength: 1024 });
+const serverFactory = new ServerFactory(SERVER, dataProvider);
 
-let server: Server;
-
-switch (SERVER) {
-  case 'express':
-    server = new ExpressServer(dataProvider);
-    break;
-  case 'fastify':
-    server = new FastifyServer(dataProvider);
-    break;
-  case 'node-http':
-    server = new HttpServer(dataProvider);
-    break;
-}
+const server = serverFactory.createServer();
 
 server.listen(PORT, () => {
   console.log(`Process ${process.pid} listening on ${PORT} with ${SERVER}`);
