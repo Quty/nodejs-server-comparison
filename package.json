@@ -14,7 +14,7 @@
   "dependencies": {
     "@types/koa": "^2.11.3",
     "express": "^4.17.1",
-    "fastify": "^2.15.0",
+    "fastify": "^2.15.1",
     "koa": "^2.13.0"
   },
   "devDependencies": {
